@@ -1,36 +1,48 @@
 #CSV
 
 import random
+global d
+d = {}
 
-csv_file = open("occupations.csv", 'r')
-csv_lines = csv_file.readlines()
+#returns a list of the csv file lines
+def open_read(csvFile):
+    csv_file = open(csvFile, 'r')
+    return csv_file.readlines()[1:len(csv_file.readlines())-1]
 
-#basic unweighted job output
-def gimmie_job():
-    #line makes it so that a random line is chosen
-    random_line = csv_lines[random.randint(1, len(csv_lines)-2)]
-
+def lineToDictEntry(line):
     #This block deals with commas and splicing
-    if random_line.find('''",''') == -1:
-        random_job = random_line.split(",")[0]
-        percentage = random_line.split(",")[1]
+    if line.find('''",''') == -1:
+        job = line.split(",")[0]
+        percentage = line.split(",")[1]
 
     else:
-        random_job = random_line.split('''",''')[0][1:]
-        percentage = random_line.split('''",''')[1]
+        job = line.split('''",''')[0][1:]
+        percentage = line.split('''",''')[1]
+    d[job] = float(percentage)
+    return d
 
-    print "---------------------------------------"
-    print random_line
-    print random_job
-    print percentage
-    print "---------------------------------------"
+#Turns the csv line list into a dictionary with Profession:Percentage
+def listToDict(lineList):
+    #iterate through the list and fill dictionary
+    for line in lineList:
+        lineToDictEntry(line)
+    return d
 
-
+#REDO IT REEEEEEEEEEEEEE
+#Picks weighted random key value from dictionary
+def getRandom():
+    threshold = random.random() * 99.9#total percentage
+    counter = 0
+    for entry in d:
+        counter += d[entry]
+        if(counter > threshold):
+            return entry
+            
 
 #testing program
-def run():
-    for x in range(0,10):
-         gimmie_job()
-
-
-run()        
+def run(csvFile):
+    lineList = open_read(csvFile)
+    listToDict(lineList)
+    print getRandom()
+    
+run("occupations.csv")        
