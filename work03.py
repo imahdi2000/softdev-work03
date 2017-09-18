@@ -8,7 +8,7 @@ d = {}
 
 #CORE FUNCTIONS =============================================================================
 
-#returns a list of the csv file lines
+#returns a list of the csv file lines.
 def open_read(csvFile):
     csv_file = open(csvFile, 'r')
     return csv_file.readlines()[1:len(csv_file.readlines())-1]#exlude the header and footer
